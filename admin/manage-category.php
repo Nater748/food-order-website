@@ -4,45 +4,80 @@
         <h1>Manage Category</h1>
 
         <br/> <br/> <br/>
+
+        <?php
+            if(isset($_SESSION['add'])){
+                echo $_SESSION['add']; 
+                unset($_SESSION['add']); 
+            }
+        ?>
+        <br><br>
+
             <a href="<?php echo $siteurl;?>admin/add-category.php" class="btn-primary">Add Category</a>
             <br/> <br/> <br/>
             <table class="tbl-full">
                 <tr>
                     <th>S.N.</th>
-                    <th>Full Name</th>
-                    <th>User Name</th>
+                    <th>Title</th>
+                    <th>Image</th>
+                    <th>Featured</th>
+                    <th>Active</th>
                     <th>Actions</th>
                 </tr>
 
-                <tr>
-                    <td>1.</td>
-                    <td>John Doe</td>
-                    <td>johndoe</td>
+                <?php
+                $sql = "SELECT * FROM category";
+                $res = mysqli_query($conn, $sql);
+                $count = mysqli_num_rows($res);
+                $sn = 1; // Serial Number
+                if($count > 0){
+                    while($row = mysqli_fetch_assoc($res)){
+                        $id = $row['id'];
+                        $title = $row['title'];
+                        $image_name = $row['image_name'];
+                        $featured = $row['featured'];
+                        $active = $row['active'];
+
+                        ?>
+
+                        <tr>
+                    <td><?php echo $sn++; ?></td>
+                    <td><?php echo $title; ?></td>
+
                     <td>
-                        <a href="#" class="btn-secondary">Update Admin</a>
-                        <a href="#" class="btn-danger">Delete Admin</a>
+                        <?php
+                        if($image_name != ""){
+                            ?>
+                            <img src="<?php echo $siteurl; ?>images/category/<?php echo $image_name; ?>" width="50px">
+                            <?php
+                        } else {
+                            echo "<div class='error'>Image not added.</div>";
+                        } 
+                        ?>
                     </td>
-                </tr>
+
+                    <td><?php echo $featured; ?></td>
+                    <td><?php echo $active; ?></td>
+                    <td>
+                        <a href="#" class="btn-secondary">Update Category</a>
+                        <a href="#" class="btn-danger">Delete Category</a>
+                    </td>
+                </tr> 
+
+
+                <?php
+
+                }
+            } else { ?>
                 
                 <tr>
-                    <td>2.</td>
-                    <td>John Doe</td>
-                    <td>johndoe</td>
-                    <td>
-                        <a href="#" class="btn-secondary">Update Admin</a>
-                        <a href="#" class="btn-danger">Delete Admin</a>
-                    </td>
+                    <td colspan="6"> <div class="error">No Category Added.</div></td>
                 </tr>
+                <?php
+            }
+                ?>
 
-                <tr>
-                    <td>3.</td>
-                    <td>John Doe</td>
-                    <td>johndoe</td>
-                    <td>
-                        <a href="#" class="btn-secondary">Update Admin</a>
-                        <a href="#" class="btn-danger">Delete Admin</a>
-                    </td>
-                </tr>
+                
             </table>
     </div>
 </div>
