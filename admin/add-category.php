@@ -69,6 +69,11 @@
             
             if(isset($_FILES['image'])){
                 $image_name = $_FILES['image']['name'];
+
+            if($image_name != ""){
+                    
+                $ext = end(explode('.', $image_name));
+                $image_name = "Category_".rand(0000, 9999).".".$ext;
                 $ext = end(explode('.', $image_name));
                 $image_name = "Category_".rand(0000, 9999).".".$ext;
                 $source_path = $_FILES['image']['tmp_name'];
@@ -81,6 +86,7 @@
                     header('Location:' . $siteurl . 'admin/add-category.php');
                     die();
                 }
+            }
             } else {
                 $image_name = ""; 
             }
