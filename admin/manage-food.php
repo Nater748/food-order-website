@@ -14,6 +14,14 @@ include "partials/menu.php";
             echo $_SESSION['add'];
             unset($_SESSION['add']);
         }
+        if(isset($_SESSION['remove'])){
+            echo $_SESSION['remove'];
+            unset($_SESSION['remove']);
+        }
+        if(isset($_SESSION['finally'])){
+            echo $_SESSION['finally'];
+            unset($_SESSION['finally']);
+        }
         ?>
 
             <table class="tbl-full">
@@ -58,8 +66,8 @@ include "partials/menu.php";
                             <td><?php echo $featured;?></td>
                             <td><?php echo $active;?></td>
                             <td>
-                                <a href="update-food.php" class="btn-secondary">Update Food</a>
-                                <a href="delete-food.php" class="btn-danger">Delete Food</a>
+                                <a href="<?php echo $siteurl;?>admin/update-food.php?id=<?php echo $id;?>" class="btn-secondary">Update Food</a>
+                                <a href="<?php echo $siteurl;?>admin/delete-food.php?id=<?php echo $id;?>&image_name=<?php echo $image_name;?>" class="btn-danger">Delete Food</a>
                             </td>
                         </tr>
                         <?php
