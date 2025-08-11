@@ -40,7 +40,7 @@
                     </p>
                     <br>
 
-                    <a href="<?php echo $siteurl?>order.php" class="btn btn-primary">Order Now</a>
+                    <a href="<?php echo $siteurl?>order.php?food_id=<?php echo $row2['id'];?>" class="btn btn-primary">Order Now</a>
                 </div>
             </div>
             <?php } ?>

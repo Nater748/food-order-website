@@ -1,5 +1,23 @@
 <?php include "partials-front/menu.php";?>
 
+    <?php
+        if(isset($_GET['food_id'])){
+            $food_id = $_GET['food_id'];
+
+            $sql = "SELECT * FROM food WHERE id=$food_id";
+            $result = mysqli_query($conn, $sql);
+            $count = mysqli_num_rows($result);
+
+            if($count ==1){
+                $row = mysqli_fetch_assoc($result);
+            }else{
+                header('Location' . $siteurl);
+            }
+        }else{
+            header('Location' . $siteurl);
+        }
+    ?>
+
 
 
     <section class="food-search">
@@ -7,18 +25,30 @@
             
             <h2 class="text-center text-white">Fill this form to confirm your order.</h2>
 
-            <form action="#" class="order">
+            <form action="" class="order" method="post">
                 <fieldset>
                     <legend>Selected Food</legend>
 
                     <div class="food-menu-img">
-                        <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+
+                        <?php
+                            if($row['image_name'] ==""){
+                                //image not available
+                                echo "<div class ='error'>Image not Available</div>";
+                            }else{
+                                //image available
+                                ?>
+                                <img src="<?php echo $siteurl; ?>images/food/<?php echo $row['image_name']; ?>" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+                                <?php
+                            }
+                        ?> 
                     </div>
     
                     <div class="food-menu-desc">
-                        <h3>Food Title</h3>
-                        <p class="food-price">$2.3</p>
-
+                        <h3><?php echo $row['title']?></h3>
+                        <input type="hidden" name="food" value="<?php echo $row['title'];?>">
+                        <p class="food-price">$<?php echo $row['price']?></p>
+                        <input type="hidden" name="price" value="<?php echo $row['price'];?>">
                         <div class="order-label">Quantity</div>
                         <input type="number" name="qty" class="input-responsive" value="1" required>
                         
@@ -44,6 +74,32 @@
                 </fieldset>
 
             </form>
+
+            <?php 
+                if(isset($_POST['submit'])){
+                    $food = $_POST['food'];
+                    $price = (float)$_POST['price'];
+                    $qty   = (int)$_POST['qty'];    
+                    $total = $price * $qty;
+                    $order_date = date('y-m-d');
+                    $status = "ordered";
+                    $customer_name = $_POST['full-name'];
+                    $customer_contact = $_POST['contact'];
+                    $customer_email = $_POST['email'];
+                    $customer_address = $_POST['address'];
+
+                    $sql2 = "INSERT into `order` (food, price, qty, total, order_date, status, customer_name, customer_contact, customer_email, customer_address) VALUES('$food', $price, $qty, $total, '$order_date', '$status', '$customer_name', '$customer_contact', '$customer_email', '$customer_address')";
+                    $result2 = mysqli_query($conn, $sql2);
+
+                    if($result2){
+                        $_SESSION['order'] = "<div class = 'success'>Order Placed</div>";
+                        header('Location:' . $siteurl);
+                    }else{
+                        $_SESSION['order'] = "<div class = 'error'>Order Failed</div>";
+                        header('Location'.$siteurl.'order.php');
+                    }
+                }
+            ?>
 
         </div>
     </section>

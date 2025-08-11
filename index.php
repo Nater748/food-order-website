@@ -1,6 +1,12 @@
 <?php include('partials-front/menu.php');?>
 
 
+    <?php 
+        if(isset($_SESSION['order'])){
+            echo $_SESSION['order'];
+            unset($_SESSION['order']);
+        }
+    ?>
 
     <section class="food-search text-center">
         <div class="container">
@@ -51,7 +57,7 @@
             <?php while($row2 = mysqli_fetch_assoc($result2)){?>
             <div class="food-menu-box">
                 <div class="food-menu-img">
-                    <img src="images/menu-pizza.jpg" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+                    <img src="<?php echo $siteurl; ?>images/food/<?php echo $row2['image_name']; ?>" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
                 </div>
 
                 <div class="food-menu-desc">
@@ -62,7 +68,7 @@
                     </p>
                     <br>
 
-                    <a href="order.php" class="btn btn-primary">Order Now</a>
+                    <a href="<?php echo $siteurl?>order.php?food_id=<?php echo $row2['id'];?>" class="btn btn-primary">Order Now</a>
                 </div>
             </div>
             <?php } ?>
